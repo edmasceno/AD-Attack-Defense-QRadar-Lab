@@ -83,4 +83,6 @@ Durante a execução do laboratório, surgiram desafios de infraestrutura e conf
 
 ---
 
+📄 Este projeto possui um estudo de caso técnico detalhado em [CASE_TECNICO.md](CASE_TECNICO.md)
+
 *Projeto desenvolvido como parte de estudos em Cibersegurança.*
