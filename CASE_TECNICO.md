@@ -1,74 +1,21 @@
-## Ataque e Detecção em Ambiente Active Directory Integrado ao SIEM
+## Detecção Avançada em Active Directory e Integração SIEM
+
+### Cenário
+A maior parte dos ataques de Active Directory em ambientes reais passa despercebida porque as configurações de auditoria padrão do Windows são insuficientes. Este case documenta como transformar logs "mudos" em alertas acionáveis no QRadar.
+
+### Desafios Técnicos
+1. **Pontos Cegos:** Ataques de Pass-the-Hash não geram os mesmos alertas de um login convencional.
+2. **Inconsistência de Logs:** Formatos XML variados dificultando a normalização no SIEM.
+3. **Bloqueios de SO:** Políticas de UAC e Time Skew (Kerberos) que impediam tanto o ataque quanto a coleta.
+
+### Metodologia de Resolução
+* **Fase de Exploração:** Executei ataques de força bruta e dumping de NTDS.dit para entender exatamente quais Event IDs eram gerados.
+* **Ajuste de Auditoria:** Modifiquei as GPOs do domínio para garantir que eventos de login de rede fossem registrados com detalhes de processo.
+* **Customização de Coleta:** Reescrevi o script de coleta em PowerShell, implementando um parser XML para extrair o endereço IP de origem e o tipo de logon diretamente dos metadados do evento.
+* **Correlação no QRadar:** Criei regras de comportamento que cruzam múltiplas falhas de login seguidas de um sucesso administrativo em curto intervalo de tempo.
+
+### Conclusão
+O projeto provou que a eficácia de um SOC não depende da ferramenta, mas do conhecimento sobre como o ataque ocorre na camada de protocolo. Conseguimos 100% de visibilidade sobre movimentação lateral e força bruta, eliminando pontos cegos críticos na infraestrutura de identidade.
 
 ---
-
-## 📌 Contexto
-Ao criar um ambiente de estudos focado em Active Directory, percebi que ataques comuns ao AD muitas vezes não são detectados quando a detecção se baseia apenas nas configurações padrão do Windows e do SIEM.
-
----
-
-## 🎯 Objetivo
-Realizar um ataque simulado realista em um domínio Windows e criar mecanismos de detecção capazes de identificar atividades maliciosas que, a princípio, não eram perceptíveis.
-
----
-
-## 🚧 Dificuldades Encontradas
-- Ataques bem-sucedidos sem avisos evidentes
-- Ocorrências de log com diferentes formatos XML
-- Erros de autenticação devido a desvio de tempo
-- Restrições de UAC dificultando a coleta completa
-
----
-
-## 🔍 Método Técnico
-A estratégia implementada incluiu:
-- Realização controlada de ataques (brute force, credential dumping, Pass-the-Hash)
-- Avaliação minuciosa dos eventos produzidos
-- Modificações na coleta e análise de logs
-- Desenvolvimento de detecções personalizadas no IBM QRadar
-
----
-
-## 🛠️ Soluções Aplicadas
-- Ajuste da sincronização temporal
-- Modificações nas políticas de UAC
-- Revisão dos roteiros de coleta
-- Correlação de eventos no SIEM
-
----
-
-## ✅ Conclusão
-Após as correções, o SIEM passou a reconhecer de forma precisa:
-- Tentativas de ataque por força bruta
-- Autenticações administrativas suspeitas
-- Movimentação lateral por meio da técnica Pass-the-Hash
-- 
----
-
-## 🤖 Uso de Inteligência Artificial como Ferramenta de Apoio
-Ferramentas de Inteligência Artificial foram empregadas como suporte ao processo de aprendizado durante o desenvolvimento deste estudo de caso técnico, especialmente na interpretação de conceitos relacionados ao Active Directory, protocolos de autenticação e eventos de segurança.
-
-A IA foi utilizada principalmente para:
-- Contribuir para a compreensão de como ataques se manifestam em ambientes Active Directory
-- Apoiar a interpretação de eventos e a análise de estruturas de log em formato XML
-- Auxiliar na estruturação do raciocínio para a elaboração de detecções
-- Avaliar a clareza e a coesão da documentação final
-
-Todas as atividades práticas, testes, validações e ajustes de detecção foram executados diretamente no ambiente de laboratório. A IA atuou como recurso complementar de apoio ao entendimento, sem substituir a análise crítica nem a execução técnica.
-
-Esse uso reflete práticas contemporâneas do mercado, nas quais a capacidade de empregar IA de forma consciente e responsável contribui para o desenvolvimento técnico contínuo.
-
----
-
-## 🧠 Lições Aprendidas
-Este case demonstrou que a eficácia da detecção depende menos das ferramentas utilizadas e mais da capacidade de compreender como os ataques se manifestam nos logs.
-
----
-
-## 📎 Referência
-
-O arquivo [`README.md`](README.md) deste repositório contém a documentação técnica detalhada, os comandos empregados e as evidências visuais.
-
----
-
-*Case técnico desenvolvido como parte de estudos práticos em Cibersegurança e Blue Team Operations.*
+*Projeto de estudo prático em Cybersecurity e Detecção.*
